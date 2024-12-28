@@ -47,7 +47,7 @@ def bond_marginal_estimate(
         coordinate_transform,
         temperature,
         min_bond_length=0.01,
-        max_bond_length=np.infty,
+        max_bond_length=np.inf,
         device=torch.device("cpu"),
         dtype=torch.get_default_dtype()
 ):

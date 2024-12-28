@@ -24,15 +24,11 @@ except ImportError:
 import numpy as np
 
 # ours
-from mdtraj import version
 from mdtraj.core.topology import _topology_from_subset, Topology
 from mdtraj.utils import unitcell
-from mdtraj.utils.six import PY3
-if PY3:
-    basestring = str
+basestring = str
 import mdtraj.core.element as elem
 from mdtraj.utils import in_units_of, ensure_type, import_, cast_indices
-from mdtraj.utils.six import string_types
 from ..util.importing import import_openmm
 
 try:
@@ -94,7 +90,7 @@ def load_hdf5(filename, stride=None, atom_indices=None, frame=None):
     --------
     mdtraj.HDF5TrajectoryFile :  Low level interface to HDF5 files
     """
-    if not isinstance(filename, string_types):
+    if not isinstance(filename, str):
         raise TypeError('filename must be of type string for load_lh5. '
             'you supplied %s' % type(filename))
 
@@ -255,7 +251,7 @@ class HDF5TrajectoryFile(object):
         """
         try:
             raw = self._get_node('/', name='topology')[0]
-            if not isinstance(raw, string_types):
+            if not isinstance(raw, str):
                 raw = raw.decode()
             topology_dict = json.loads(raw)
         except self.tables.NoSuchNodeError:
@@ -581,7 +577,7 @@ class HDF5TrajectoryFile(object):
                 node = self._get_node(where='/', name=name)
                 data = node.__getitem__(slice)
                 in_units = node.attrs.units
-                if not isinstance(in_units, string_types):
+                if not isinstance(in_units, str):
                     in_units = in_units.decode()
                 data =  in_units_of(data, in_units, out_units)
                 return data
@@ -803,7 +799,7 @@ class HDF5TrajectoryFile(object):
         self._handle.root._v_attrs.conventions = 'Pande'
         self._handle.root._v_attrs.conventionVersion = '1.1'
         self._handle.root._v_attrs.program = 'MDTraj'
-        self._handle.root._v_attrs.programVersion = version.short_version
+        self._handle.root._v_attrs.programVersion = mdtraj.__version__
         self._handle.root._v_attrs.title = 'title'
 
         # if the client has not the title attribute themselves, we'll
