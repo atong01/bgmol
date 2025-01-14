@@ -219,7 +219,9 @@ class OpenMMSystem(BaseSystem):
         else:
             integrator = mm.LangevinIntegrator(temperature, 1., 0.002)
         from bgflow.distribution.energy.openmm import OpenMMBridge, OpenMMEnergy
-        energy_bridge = OpenMMBridge(self.system, integrator, **kwargs)
+        # (alex) Multiprocess OpenMMBridge was hanging so this disables the
+        # multiprocessing for now.
+        energy_bridge = OpenMMBridge(self.system, integrator, platform_name="CUDA", n_workers=1)
         self._energy_model = OpenMMEnergy(self.dim, energy_bridge)
 
     @property
